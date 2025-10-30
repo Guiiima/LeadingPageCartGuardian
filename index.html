@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CartGuardian - Recupere Vendas Perdidas</title>
+    <style>
+        /* Reset básico e fontes */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #34495e;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- Navegação --- */
+        nav {
+            background: #ffffff;
+            border-bottom: 1px solid #e9ecef;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1abc9c;
+            text-decoration: none;
+        }
+
+        .nav-links a {
+            color: #34495e;
+            text-decoration: none;
+            font-weight: 500;
+            margin-left: 20px;
+        }
+
+        .nav-links .btn {
+            margin-left: 20px;
+        }
+
+        /* --- Botões --- */
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: #1abc9c;
+            color: #ffffff;
+        }
+        .btn-primary:hover {
+            background-color: #16a085;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 2px solid #1abc9c;
+            color: #1abc9c;
+        }
+        .btn-secondary:hover {
+            background-color: #1abc9c;
+            color: #ffffff;
+        }
+
+        /* --- Secção Hero (Principal) --- */
+        .hero {
+            background: #ffffff;
+            text-align: center;
+            padding: 80px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 30px auto;
+        }
+
+        .hero-platforms {
+            margin-top: 30px;
+        }
+
+        .hero-platforms span {
+            font-size: 0.9rem;
+            color: #95a5a6;
+            margin: 0 10px;
+        }
+
+        /* --- Secção "Como Funciona" --- */
+        .how-it-works {
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 40px;
+        }
+
+        .steps-container {
+            display: flex;
+            justify-content: space-around;
+            gap: 30px;
+        }
+
+        .step {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            flex-basis: 30%;
+        }
+
+        .step .step-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1abc9c;
+            background: #e8f8f5;
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+
+        .step h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        /* --- Secção de Funcionalidades --- */
+        .features {
+            padding: 60px 0;
+            background: #ffffff;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .feature-item h3 {
+            color: #1abc9c;
+            font-size: 1.3rem;
+        }
+        
+        .feature-image img {
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- Secção de Integrações --- */
+        .integrations {
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        .logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .logos img {
+            height: 50px;
+            opacity: 0.7;
+        }
+
+        /* --- Secção CTA Final --- */
+        .cta-final {
+            background: #2c3e50;
+            color: #ffffff;
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .cta-final h2 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+        }
+
+        /* --- Footer --- */
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            font-size: 0.9rem;
+            color: #95a5a6;
+        }
+
+        /* --- Responsividade --- */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .steps-container, .feature-grid { flex-direction: column; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="container">
+            <a href="#" class="nav-logo">CartGuardian</a>
+            <div class="nav-links">
+                <a href="#como-funciona">Como Funciona</a>
+                <a href="#funcionalidades">Funcionalidades</a>
+                <a href="https://cartguardian.netlify.app/login" class="btn btn-secondary">Login</a>
+                <a href="https://cartguardian.netlify.app/register" class="btn btn-primary">Registar</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Não perca mais vendas.</h1>
+            <p>O CartGuardian recupera automaticamente os seus carrinhos abandonados, transformando visitas perdidas em receita para a sua loja.</p>
+            
+            <div>
+                <a href="https://SEU-BACKEND.COM/shopify/install" class="btn btn-primary">Instalar na Shopify</a>
+                
+                <a href="https://cartguardian.netlify.app/register" class="btn btn-secondary">Conectar WooCommerce</a>
+            </div>
+
+            <div class="hero-platforms">
+                <span>Shopify</span> •
+                <span>WooCommerce</span> •
+                <span>(Em breve: VTEX, Nuvemshop)</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="como-funciona" class="how-it-works">
+        <div class="container">
+            <h2 class="section-title">Comece a recuperar vendas em 3 passos</h2>
+            <div class="steps-container">
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <h3>Conecte a sua Loja</h3>
+                    <p>Faça a instalação com um clique na Shopify ou conecte as suas chaves de API do WooCommerce.</p>
+                </div>
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <h3>Configure a Campanha</h3>
+                    <p>Defina em quanto tempo (ex: 60 minutos) o e-mail de recuperação deve ser enviado e personalize o template.</p>
+                </div>
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <h3>Relaxe e Veja a Receita</h3>
+                    <p>O nosso sistema monitoriza os abandonos, envia os e-mails e mostra-lhe o valor recuperado no dashboard.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="funcionalidades" class="features">
+        <div class="container">
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h3>Dashboard Intuitivo</h3>
+                    <p>Acompanhe em tempo real as métricas mais importantes: receita recuperada, taxa de conversão, e-mails enviados e ticket médio.</p>
+                    
+                    <h3>Análise Multiplataforma</h3>
+                    <p>O nosso sistema é construído sobre uma arquitetura de adaptadores, permitindo-nos integrar com Shopify, WooCommerce e mais, centralizando todos os seus dados num só lugar.</p>
+                </div>
+                <div class="feature-image">
+                    <img src="https://i.imgur.com/8a5z4b5.png" alt="Dashboard do CartGuardian">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="integrations">
+        <div class="container">
+            <h2 class="section-title">Integrações Atuais</h2>
+            <div class="logos">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Shopify_logo_2018.svg" alt="Shopify">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/WooCommerce_logo.svg" alt="WooCommerce">
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-final">
+        <div class="container">
+            <h2>Pronto para parar de perder clientes?</h2>
+            <p>Crie a sua conta gratuita e comece a recuperar as suas vendas hoje mesmo.</p>
+            <a href="https://cartguardian.netlify.app/register" class="btn btn-primary">Começar Agora</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 CartGuardian. Todos os direitos reservados.</p>
+            <p>Um projeto de TCC.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
