@@ -5,389 +5,477 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CartGuardian - Recupere Vendas Perdidas</title>
   <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3304/3304516.png" type="image/png">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 
-    body {
-      font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-      color: #2c3e50;
-      overflow-x: hidden;
-    }
+  body {
+    font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    color: #2c3e50;
+    overflow-x: hidden;
+  }
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
 
-    nav {
-      backdrop-filter: blur(10px);
-      background: rgba(255, 255, 255, 0.6);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      transition: all 0.3s ease;
-    }
+  nav {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.6);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: all 0.3s ease;
+  }
+  
+  /* --- NOVO CÓDIGO CSS ADICIONADO --- */
+  nav.nav-hidden {
+    transform: translateY(-100%);
+  }
+  /* --- FIM DO NOVO CÓDIGO CSS --- */
 
+  nav .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 20px; /* Ajustado para ter padding lateral consistente */
+  }
+
+  .nav-logo {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #16a085;
+    text-decoration: none;
+    transition: transform 0.3s ease;
+  }
+
+  .nav-logo:hover {
+    transform: scale(1.05);
+  }
+
+  .nav-links a {
+    margin-left: 25px;
+    color: #2c3e50;
+    font-weight: 500;
+    text-decoration: none;
+    position: relative;
+    transition: color 0.3s ease;
+  }
+
+  .nav-links a::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background-color: #16a085;
+    transition: width 0.3s ease;
+  }
+
+  .nav-links a:hover {
+    color: #16a085;
+  }
+
+  .nav-links a:hover::after {
+    width: 100%;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 12px 26px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #1abc9c, #16a085);
+    color: white;
+    box-shadow: 0 4px 12px rgba(26, 188, 156, 0.4);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-3px);
+    color: white !important;
+    box-shadow: 0 6px 20px rgba(26, 188, 156, 0.6);
+  }
+
+  .btn-secondary {
+    border: 2px solid #16a085;
+    color: #16a085;
+    background: transparent;
+  }
+
+  .btn-secondary:hover {
+    background-color: #16a085;
+    color: white !important;
+    transform: translateY(-3px);
+  }
+
+  .hero {
+    text-align: center;
+    padding: 120px 20px;
+    background: linear-gradient(135deg, #ffffffcc, #ecf0f1cc);
+    backdrop-filter: blur(8px);
+    animation: fadeIn 1.2s ease forwards;
+  }
+
+  .hero h1 {
+    font-size: 3.2rem;
+    margin-bottom: 20px;
+    background: linear-gradient(-45deg, #16a085, #1abc9c, #2c3e50, #16a085);
+    background-size: 400% 400%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: slideDown 1.2s ease, textShine 10s ease infinite;
+  }
+
+  .hero p {
+    font-size: 1.2rem;
+    max-width: 650px;
+    margin: 0 auto 40px auto;
+    color: #34495e;
+    opacity: 0.9;
+  }
+
+  .hero-platforms {
+    margin-top: 40px;
+    font-size: 0.95rem;
+    color: #7f8c8d;
+  }
+
+  section {
+    padding: 80px 0;
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.8s ease-out;
+  }
+
+  section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: 2.6rem;
+    color: #2c3e50;
+    margin-bottom: 50px;
+    position: relative;
+  }
+
+  .section-title::after {
+    content: "";
+    width: 80px;
+    height: 4px;
+    background: #16a085;
+    display: block;
+    margin: 15px auto 0;
+    border-radius: 2px;
+  }
+
+  .steps-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+  }
+
+  .step {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+    width: 300px;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.6s ease-out;
+  }
+
+  .step.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .step:nth-child(1) {
+    transition-delay: 0.1s;
+  }
+
+  .step:nth-child(2) {
+    transition-delay: 0.2s;
+  }
+
+  .step:nth-child(3) {
+    transition-delay: 0.3s;
+  }
+
+  .step:hover {
+    transform: translateY(-8px);
+  }
+
+  .step .step-number {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background-color: #e8f8f5;
+    color: #16a085;
+    justify-content: center;
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 55px;
+    margin: 0 auto 20px;
+    display: flex;
+  }
+
+  .feature-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+
+  .feature-item h3 {
+    color: #16a085;
+    font-size: 1.4rem;
+    margin-top: 20px;
+  }
+
+  .browser-mockup {
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    border: 1px solid #e8e8e8;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .browser-mockup:hover {
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+  }
+
+  .browser-header {
+    padding: 10px 15px;
+    background: #f0f0f0;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .browser-header span {
+    display: block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+
+  .browser-header span:nth-child(1) { background: #ff5f56; }
+  .browser-header span:nth-child(2) { background: #ffbd2e; }
+  .browser-header span:nth-child(3) { background: #27c93f; }
+
+  .feature-image img {
+    width: 100%;
+    display: block;
+    border-radius: 0;
+    transition: transform 0.3s ease;
+  }
+
+  .browser-mockup:hover img {
+    transform: scale(1.03);
+  }
+
+  .logos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+    flex-wrap: wrap;
+  }
+
+  .logos img {
+    height: 60px;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+  }
+
+  .logos img:hover {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+
+  .cta-final {
+    background: linear-gradient(135deg, #16a085, #1abc9c);
+    color: white;
+    text-align: center;
+    padding: 100px 20px;
+    border-top-left-radius: 40px;
+    border-top-right-radius: 40px;
+  }
+
+  .cta-final h2 {
+    font-size: 2.6rem;
+    margin-bottom: 20px;
+  }
+
+  .cta-final p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 30px;
+  }
+
+  footer {
+    text-align: center;
+    padding: 40px 0;
+    font-size: 0.95rem;
+    color: #7f8c8d;
+    background: #ecf0f1;
+  }
+
+  .animated-cart {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    fill: currentColor;
+    color: #16a085;;
+    vertical-align: middle;
+    margin-left: 10px;
+    animation: cartBounce 4s ease-in-out infinite;
+    transform-origin: bottom;
+  }
+
+  .feature-item h3 .animated-cart {
+    width: 0.9em;
+    height: 0.9em;
+    margin-left: 8px;
+    animation-duration: 8s;
+  }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes slideDown { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  @keyframes textShine {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* RESPONSIVIDADE */
+  @media (max-width: 1024px) {
+    .feature-grid {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+    
+    .feature-item {
+        max-width: 600px; /* Evita que o texto fique muito largo */
+        margin: 0 auto; /* Centraliza o item de texto */
+    }
+  }
+
+  @media (max-width: 768px) {
     nav .container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 0;
+      flex-direction: column;
+      gap: 15px; /* NOVO: Adiciona espaço entre logo e links */
     }
 
-    .nav-logo {
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: #16a085;
-      text-decoration: none;
-      transition: transform 0.3s ease;
-    }
-
-    .nav-logo:hover {
-      transform: scale(1.05);
-    }
-
-    .nav-links a {
-      margin-left: 25px;
-      color: #2c3e50;
-      font-weight: 500;
-      text-decoration: none;
-      position: relative;
-      transition: color 0.3s ease;
-    }
-
-    .nav-links a::after {
-      content: "";
-      position: absolute;
-      bottom: -5px;
-      left: 0;
-      width: 0%;
-      height: 2px;
-      background-color: #16a085;
-      transition: width 0.3s ease;
-    }
-
-    .nav-links a:hover {
-      color: #16a085;
-    }
-
-    .nav-links a:hover::after {
+    .nav-links {
+      display: flex; /* NOVO: Garante que é um flex container */
+      flex-direction: column;
+      align-items: center; /* NOVO: Centraliza os links */
       width: 100%;
+      margin-top: 10px;
+      gap: 10px;
     }
-
-    .btn {
-      display: inline-block;
-      padding: 12px 26px;
-      border-radius: 8px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: all 0.3s ease;
-      cursor: pointer;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, #1abc9c, #16a085);
-      color: white;
-      box-shadow: 0 4px 12px rgba(26, 188, 156, 0.4);
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-3px);
-      color: white !important;
-      box-shadow: 0 6px 20px rgba(26, 188, 156, 0.6);
-    }
-
-    .btn-secondary {
-      border: 2px solid #16a085;
-      color: #16a085;
-      background: transparent;
-    }
-
-    .btn-secondary:hover {
-      background-color: #16a085;
-      color: white !important;
-      transform: translateY(-3px);
+    
+    .nav-links a {
+        margin-left: 0; /* NOVO: Remove margem desktop */
+        padding: 8px 0; /* NOVO: Adiciona espaço de clique */
     }
 
     .hero {
-      text-align: center;
-      padding: 120px 20px;
-      background: linear-gradient(135deg, #ffffffcc, #ecf0f1cc);
-      backdrop-filter: blur(8px);
-      animation: fadeIn 1.2s ease forwards;
+      padding: 80px 15px;
     }
 
     .hero h1 {
-      font-size: 3.2rem;
-      margin-bottom: 20px;
-      background: linear-gradient(-45deg, #16a085, #1abc9c, #2c3e50, #16a085);
-      background-size: 400% 400%;
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: slideDown 1.2s ease, textShine 10s ease infinite;
+      font-size: 2.4rem;
     }
 
     .hero p {
-      font-size: 1.2rem;
-      max-width: 650px;
-      margin: 0 auto 40px auto;
-      color: #34495e;
-      opacity: 0.9;
+      font-size: 1rem;
     }
-
-    .hero-platforms {
-      margin-top: 40px;
-      font-size: 0.95rem;
-      color: #7f8c8d;
-    }
-
+    
     section {
-      padding: 80px 0;
-      opacity: 0;
-      transform: translateY(50px);
-      transition: all 0.8s ease-out;
-    }
-
-    section.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .section-title {
-      text-align: center;
-      font-size: 2.6rem;
-      color: #2c3e50;
-      margin-bottom: 50px;
-      position: relative;
-    }
-
-    .section-title::after {
-      content: "";
-      width: 80px;
-      height: 4px;
-      background: #16a085;
-      display: block;
-      margin: 15px auto 0;
-      border-radius: 2px;
+        padding: 60px 0; /* NOVO: Reduz padding da seção */
     }
 
     .steps-container {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 30px;
-    }
-
-    .step {
-      background: rgba(255, 255, 255, 0.8);
-      border-radius: 10px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-      padding: 30px;
-      width: 300px;
-      opacity: 0;
-      transform: translateY(40px);
-      transition: all 0.6s ease-out;
-    }
-
-    .step.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .step:nth-child(1) {
-      transition-delay: 0.1s;
-    }
-
-    .step:nth-child(2) {
-      transition-delay: 0.2s;
-    }
-
-    .step:nth-child(3) {
-      transition-delay: 0.3s;
-    }
-
-    .step:hover {
-      transform: translateY(-8px);
-    }
-
-    .step .step-number {
-      width: 55px;
-      height: 55px;
-      border-radius: 50%;
-      background-color: #e8f8f5;
-      color: #16a085;
-      justify-content: center;
-      font-size: 1.6rem;
-      font-weight: 700;
-      line-height: 55px;
-      margin: 0 auto 20px;
-      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .feature-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      align-items: center;
+      /* grid-template-columns: 1fr; (Já definido em 1024px) */
+      gap: 30px; /* Aumentado um pouco o gap */
     }
 
-    .feature-item h3 {
-      color: #16a085;
-      font-size: 1.4rem;
-      margin-top: 20px;
-    }
-
-    .browser-mockup {
-      background: #ffffff;
-      border-radius: 8px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-      border: 1px solid #e8e8e8;
-      overflow: hidden;
-      transition: all 0.3s ease;
-    }
-
-    .browser-mockup:hover {
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-      transform: translateY(-5px);
-    }
-
-    .browser-header {
-      padding: 10px 15px;
-      background: #f0f0f0;
-      border-bottom: 1px solid #e0e0e0;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .browser-header span {
-      display: block;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-    }
-
-    .browser-header span:nth-child(1) { background: #ff5f56; }
-    .browser-header span:nth-child(2) { background: #ffbd2e; }
-    .browser-header span:nth-child(3) { background: #27c93f; }
-
-    .feature-image img {
-      width: 100%;
-      display: block;
-      border-radius: 0;
-      transition: transform 0.3s ease;
-    }
-
-    .browser-mockup:hover img {
-      transform: scale(1.03);
-    }
-
-    .logos {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 60px;
-      flex-wrap: wrap;
-    }
-
-    .logos img {
-      height: 60px;
-      opacity: 0.8;
-      transition: all 0.3s ease;
-    }
-
-    .logos img:hover {
-      opacity: 1;
-      transform: scale(1.1);
+    .section-title {
+      font-size: 2rem;
     }
 
     .cta-final {
-      background: linear-gradient(135deg, #16a085, #1abc9c);
-      color: white;
-      text-align: center;
-      padding: 100px 20px;
-      border-top-left-radius: 40px;
-      border-top-right-radius: 40px;
+      padding: 70px 20px;
+      border-radius: 0;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .hero {
+        padding: 60px 15px; /* NOVO: Reduz padding */
+    }
+    
+    .hero h1 {
+      font-size: 2.0rem; /* Ajustado */
+    }
+
+    .btn {
+      padding: 10px 18px;
+      font-size: 0.9rem;
+    }
+    
+    .step {
+        width: 90%; /* NOVO: Torna o card fluido */
+        max-width: 300px; /* NOVO: Limita o tamanho */
+        padding: 25px;
+    }
+
+    .logos {
+        gap: 30px; /* NOVO: Reduz o gap */
+    }
+    
+    .logos img {
+      height: 45px;
     }
 
     .cta-final h2 {
-      font-size: 2.6rem;
-      margin-bottom: 20px;
+      font-size: 1.8rem;
     }
 
     .cta-final p {
-      font-size: 1.1rem;
-      opacity: 0.9;
-      margin-bottom: 30px;
-    }
-
-    footer {
-      text-align: center;
-      padding: 40px 0;
       font-size: 0.95rem;
-      color: #7f8c8d;
-      background: #ecf0f1;
     }
-
-    .animated-cart {
-      display: inline-block;
-      width: 1em;
-      height: 1em;
-      fill: currentColor;
-      color: #16a085;;
-      vertical-align: middle;
-      margin-left: 10px;
-      animation: cartBounce 4s ease-in-out infinite;
-      transform-origin: bottom;
-    }
-
-    .feature-item h3 .animated-cart {
-      width: 0.9em;
-      height: 0.9em;
-      margin-left: 8px;
-      animation-duration: 8s;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    @keyframes slideDown {
-      from { transform: translateY(-30px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-
-    @keyframes textShine {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    @keyframes cartBounce {
-      0%, 100% { transform: translateY(0); }
-      25% { transform: translateY(-5px); }
-      50% { transform: translateY(0); }
-      75% { transform: translateY(-2px); }
-    }
-
-    @media (max-width: 900px) {
-      .feature-grid { grid-template-columns: 1fr; text-align: center; }
-    }
-
-    @media (max-width: 600px) {
-      .hero h1 { font-size: 2.2rem; }
-      .section-title { font-size: 2rem; }
-    }
-  </style>
+  }
+</style>  
 </head>
 
 <body>
@@ -475,8 +563,6 @@
   </div>
 </section>
 
-
-
   <section class="integrations">
     <div class="container">
       <h2 class="section-title">Integrações Atuais</h2>
@@ -511,6 +597,22 @@
     };
     const observer = new IntersectionObserver(observerCallback, observerOptions);
     document.querySelectorAll("section, .step").forEach(el => observer.observe(el));
+
+    let lastScrollTop = 0;
+    const navbar = document.querySelector('nav');
+
+    window.addEventListener('scroll', function() {
+      let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+      if (currentScroll > lastScrollTop) {
+        if (currentScroll > 100) { 
+          navbar.classList.add('nav-hidden');
+        }
+      } else {
+        navbar.classList.remove('nav-hidden');
+      }
+      lastScrollTop = currentScroll <= 0 ? 0 : currentScroll; 
+    }, false);
   </script>
 </body>
 </html>
